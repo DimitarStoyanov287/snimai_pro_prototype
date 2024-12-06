@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snimai.Pro - Rent Film Equipment</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <img src="snimaiPro.jpg" alt="Snimai.Pro Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#explore">Explore</a>
+            <a href="login.html" class="login-btn">Log In</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="search-container">
+            <h2>Equipment for rent in</h2>
+            <h1>Bulgaria</h1>
+            <p>Rent cinema equipment and more with Snimai.Pro</p>
+            <form class="search-form">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="Bulgaria" required>
+                
+                <div class="date-inputs">
+                    <div>
+                        <label for="start-date">Rent from</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div>
+                        <label for="end-date">Till</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="search-button">
+                    <i class="fa fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+    </section>
+    
+
+    <section class="features">
+        <h2>Why Choose Snimai.Pro?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Quality Equipment</h3>
+                <p>Only the best cameras, lighting, and sound equipment available for rent.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Flexible Rentals</h3>
+                <p>Hourly, daily, or weekly plans to match your project’s needs.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Trusted Providers</h3>
+                <p>Verified suppliers to ensure you get what you need, when you need it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-listings" id="explore">
+        <h2>Popular Equipment</h2>
+        <div class="listings-grid">
+            <div class="listing-card">
+                <img src="camera.png" alt="Camera Equipment">
+                <h3>Canon EOS C300</h3>
+                <p>From $50 per day</p>
+            </div>
+            <div class="listing-card">
+                <img src="lights.png" alt="Lighting Equipment">
+                <h3>LED Light Panels</h3>
+                <p>From $20 per day</p>
+            </div>
+            <div class="listing-card">
+                <img src="drone.png" alt="Drone Equipment">
+                <h3>Dji Phantom 4 Pro</h3>
+                <p>From $70 per day</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <div><a href="#about">About Us</a></div>
+            <div><a href="#services">Our Services</a></div>
+            <div><a href="#explore">Explore Equipment</a></div>
+            <div><a href="contact.html">Contact</a></div>
+        </div>
+        <p>&copy; 2022 Snimai.Pro - All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
