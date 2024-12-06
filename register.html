@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snimai.Pro - Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="auth-container">
+        <h2>Create an Account</h2>
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Username" required>
+
+            <label for="psw">Password</label>
+            <input type="password" id="psw" placeholder="Password" 
+                   name="psw" 
+                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                   title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="First Name" required>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+
+            <label for="role">Role</label>
+            <select id="role" required>
+                <option value="" disabled selected>Select your role</option>
+            </select>
+
+            <label for="experience">Years of Experience</label>
+            <input type="number" id="experience" placeholder="Years of Experience" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <p class="redirect-text">Already have an account? <a href="login.html">Log in</a></p>
+        <a href="index.html" class="go-back-link">
+            <i class="fa-solid fa-house"></i> Go Back
+        </a>
+    </div>
+
+    <div id="message">
+        <h3>Password must contain the following:</h3>
+        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+        <p id="number" class="invalid">A <b>number</b></p>
+        <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const roleSelect = document.getElementById('role');
+            try {
+                const response = await fetch('/roles');
+                if (!response.ok) throw new Error('Failed to fetch roles');
+                const roles = await response.json();
+                roles.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.textContent = role.role_name;
+                    roleSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching roles:', error);
+                roleSelect.innerHTML = '<option disabled>Failed to load roles</option>';
+            }
+        });
+
+        const passwordInput = document.getElementById('psw');
+        const requirements = {
+            letter: /[a-z]/,
+            capital: /[A-Z]/,
+            number: /\d/,
+            length: /.{8,}/
+        };
+
+        passwordInput.addEventListener('input', () => {
+            for (const [id, regex] of Object.entries(requirements)) {
+                const element = document.getElementById(id);
+                if (regex.test(passwordInput.value)) {
+                    element.classList.remove('invalid');
+                    element.classList.add('valid');
+                } else {
+                    element.classList.remove('valid');
+                    element.classList.add('invalid');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
