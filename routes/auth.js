@@ -1,40 +1,29 @@
 const express = require('express');
+const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
-const pool = require('../db'); // Import database connection
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
+const JWT_SECRET = 'your_secret_key'; // Replace with a secure secret key
+
+// Register route
 router.post('/register', async (req, res) => {
-    const { username, password, firstName, lastName, role_id, experience, email } = req.body;
-
     try {
+        const { username, password, email, phoneNumber, firstName, lastName, role, experience, location } = req.body;
+        
         // Check if username or email already exists
-        const userExists = await pool.query(
-            'SELECT * FROM users WHERE username = $1 OR email = $2',
-            [username, email]
-        );
-
-        if (userExists.rows.length > 0) {
-            return res.status(400).json({ error: 'Username or email already taken' });
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).send("Username or email already in use");
         }
 
-        // Hash the password
+        // Hash password and create new user
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert new user into the database
-        const newUser = await pool.query(
-            `INSERT INTO users (username, password, first_name, last_name, role_id, experience, email, created_at)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING id, username`,
-            [username, hashedPassword, firstName, lastName, role_id, experience, email]
-        );
-
-        // Send success response
-        res.status(201).json({
-            message: 'User registered successfully',
-            user: newUser.rows[0],
-        });
+        const newUser = new User({ username, password: hashedPassword, email, phoneNumber, firstName, lastName, role, experience, location });
+        await newUser.save();
+        res.status(201).send("User registered successfully");
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).send("Error registering user");
     }
 });
 
@@ -84,6 +73,20 @@ router.post('/login', async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: 'Server error' });
+router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(400).send("Invalid credentials");
+        }
+
+        // Generate JWT
+        const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ message: "Login successful", token });
+    } catch (err) {
+        res.status(500).send("Error logging in");
     }
 });
 
